@@ -4,7 +4,11 @@ import random
 """
 User defined constants
 """
+## Number of consecutive generations for which the average distance must be above or equal to 0.75
 consensus_generations = 5
+
+
+
 
 """
 Function that accepts two DNA sequences and calculates the genetic distance between them,
@@ -20,6 +24,9 @@ def calculate_distance(sequence1: list, sequence2: list) -> float:
 
     return differences / length
 
+"""
+Simple function to calculate the average distance given a list of distances by generation
+"""
 def calculate_average_distance(partial_distance_by_generation: list) -> float:
     return sum(partial_distance_by_generation) / len(partial_distance_by_generation)
 
@@ -56,16 +63,78 @@ def simulate_JC(nucleotide_sequence: list) -> list:
 
     return distance_by_generation
 
+# print(simulate_JC(['A','A', 'A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A']))
 
 
+def simulate_K2P(nucleotide_sequence: list) -> list:
+     ## User defined constants for the Kimura 2-Parameter Model:
+    alpha = 0.07
+    beta = 0.05
+
+    """
+    This mutation table gives all the probabilities of a nucleotide (first key) mutating to the second nucleotide
+    (second key) by K2P rules, but adds upon the previous probability. This makes it easy to progressively check a
+    a random number generated for which mutation (or none mutation) should occur
+    """
+
+    mutation_table = {
+        'A': {
+            'A': (1 - alpha - (2 * beta)),
+            'C': ((1 - alpha - (2 * beta)) + beta),
+            'G': (((1 - alpha - (2 * beta)) + beta) + alpha),
+            'T': 1
+        },
+        'C': {
+            'A': beta,
+            'C': (beta + ((1 - alpha - (2 * beta)))),
+            'G': ((beta + ((1 - alpha - (2 * beta)))) + beta),
+            'T': 1
+        },
+        'G': {
+            'A': alpha,
+            'C': (alpha + beta),
+            'G': ((alpha + beta) + (1 - alpha - (2 * beta))),
+            'T': 1
+        },
+        'T': {
+            'A': beta,
+            'C': (beta + alpha),
+            'G': (beta + alpha + beta),
+            'T': 1
+        }
+    }
 
 
-print(simulate_JC(['A','A', 'A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A']))
+    original_sequence = nucleotide_sequence.copy()
+    distance_by_generation = [0.0]
+
+    while (calculate_average_distance(distance_by_generation[(-1 * consensus_generations) : ]) < 0.75):
+
+        for i in range (len(nucleotide_sequence)):
+
+            ## get a random number between 0 and 1 inclusive
+            random_float = random.random()
+            nucleotide = nucleotide_sequence[i]
+
+            sub_table = mutation_table[nucleotide]
+
+            if (random_float <= sub_table['A']):
+                nucleotide_sequence[i] = 'A'
+            elif (random_float <= sub_table['C']):
+                nucleotide_sequence[i] = 'C'
+            elif (random_float <= sub_table['G']):
+                nucleotide_sequence[i] = 'G'
+            ## if it does not fall in the range of probabilities, then it falls in the probability of mutating to T
+            else:
+                nucleotide_sequence[i] = 'T'
+
+        ## add the distance to the end of the distance_by_generation list
+        distance_by_generation.append(calculate_distance(original_sequence, nucleotide_sequence))
+
+    return distance_by_generation
 
 
-
-# def simulate_K2P(nucleotide_sequence: list) -> list:
-#     return
+print(simulate_K2P(['A','A', 'A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A']))
 
 # def simulate_HKY85(nucleotide_sequence: list) -> list:
 #     return
