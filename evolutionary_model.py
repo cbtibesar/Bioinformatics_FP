@@ -8,8 +8,6 @@ User defined constants
 consensus_generations = 5
 
 
-
-
 """
 Function that accepts two DNA sequences and calculates the genetic distance between them,
 returning the distance as a decimal of differences over length of the sequences
@@ -24,11 +22,49 @@ def calculate_distance(sequence1: list, sequence2: list) -> float:
 
     return differences / length
 
+
 """
 Simple function to calculate the average distance given a list of distances by generation
 """
+
 def calculate_average_distance(partial_distance_by_generation: list) -> float:
     return sum(partial_distance_by_generation) / len(partial_distance_by_generation)
+
+
+"""
+Function to simulate any of the genetic evolutionary models given the table of mutation probabilities and the
+nucleotide sequence
+"""
+
+def simulatate_genetic_evolution(mutation_table: dict, nucleotide_sequence: list) -> list:
+    original_sequence = nucleotide_sequence.copy()
+    distance_by_generation = [0.0]
+
+    while (calculate_average_distance(distance_by_generation[(-1 * consensus_generations):]) < 0.75):
+
+        for i in range(len(nucleotide_sequence)):
+
+            # get a random number between 0 and 1 inclusive
+            random_float = random.random()
+            nucleotide = nucleotide_sequence[i]
+
+            sub_table = mutation_table[nucleotide]
+
+            if (random_float <= sub_table['A']):
+                nucleotide_sequence[i] = 'A'
+            elif (random_float <= sub_table['C']):
+                nucleotide_sequence[i] = 'C'
+            elif (random_float <= sub_table['G']):
+                nucleotide_sequence[i] = 'G'
+            # if it does not fall in the range of probabilities, then it falls in the probability of mutating to T
+            else:
+                nucleotide_sequence[i] = 'T'
+
+        # add the distance to the end of the distance_by_generation list
+        distance_by_generation.append(calculate_distance(
+            original_sequence, nucleotide_sequence))
+
+    return distance_by_generation
 
 
 """
@@ -39,35 +75,47 @@ def simulate_JC(nucleotide_sequence: list) -> list:
     ## User defined constants for the Jukes-Cantor Model:
     alpha = .05
 
-    original_sequence = nucleotide_sequence.copy()
-    distance_by_generation = [0.0]
+    """
+    This mutation table gives all the probabilities of a nucleotide (first key) mutating to the second nucleotide
+    (second key) by JC rules, but adds upon the previous probability. This makes it easy to progressively check a
+    a random number generated for which mutation (or none mutation) should occur
+    """
 
-    while (calculate_average_distance(distance_by_generation[(-1 * consensus_generations) : ]) < 0.75):
+    mutation_table = {
+        'A': {
+            'A': 1 - (3 * alpha),
+            'C': 1 - (2 * alpha),
+            'G': 1 - alpha,
+            'T': 1
+        },
+        'C': {
+            'A': alpha,
+            'C': 1 - (2 * alpha),
+            'G': 1 - alpha,
+            'T': 1
+        },
+        'G': {
+            'A': alpha,
+            'C': 2 * alpha,
+            'G': 1 - alpha,
+            'T': 1
+        },
+        'T': {
+            'A': alpha,
+            'C': 2 * alpha,
+            'G': 1 - alpha,
+            'T': 1
+        }
+    }
+    print(mutation_table)
 
-        for i in range (len(nucleotide_sequence)):
-
-            ## get a random number between 0 and 1 inclusive
-            random_float = random.random()
-            nucleotide = nucleotide_sequence[i]
-
-            ## if the random number is less than or equal the mutation rate, mutate the nucleotide with a random nucleotide other than the original (since each is equally likely in JC Model)
-            if random_float <= alpha:
-                dna_nucleotides = ['A', 'C', 'G', 'T']
-                ## remove the the original nucleotide to so that it does not mutate to itself
-                dna_nucleotides.remove(nucleotide)
-                ## pick a random nucleotide of the remaining to mutate to
-                nucleotide_sequence[i] = dna_nucleotides[random.randint(0, 2)]
-
-        ## add the distance to the end of the distance_by_generation list
-        distance_by_generation.append(calculate_distance(original_sequence, nucleotide_sequence))
-
-    return distance_by_generation
+    return simulatate_genetic_evolution(mutation_table, nucleotide_sequence)
 
 # print(simulate_JC(['A','A', 'A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A']))
 
 
 def simulate_K2P(nucleotide_sequence: list) -> list:
-     ## User defined constants for the Kimura 2-Parameter Model:
+    ## User defined constants for the Kimura 2-Parameter Model:
     alpha = 0.07
     beta = 0.05
 
@@ -104,40 +152,61 @@ def simulate_K2P(nucleotide_sequence: list) -> list:
         }
     }
 
-
-    original_sequence = nucleotide_sequence.copy()
-    distance_by_generation = [0.0]
-
-    while (calculate_average_distance(distance_by_generation[(-1 * consensus_generations) : ]) < 0.75):
-
-        for i in range (len(nucleotide_sequence)):
-
-            ## get a random number between 0 and 1 inclusive
-            random_float = random.random()
-            nucleotide = nucleotide_sequence[i]
-
-            sub_table = mutation_table[nucleotide]
-
-            if (random_float <= sub_table['A']):
-                nucleotide_sequence[i] = 'A'
-            elif (random_float <= sub_table['C']):
-                nucleotide_sequence[i] = 'C'
-            elif (random_float <= sub_table['G']):
-                nucleotide_sequence[i] = 'G'
-            ## if it does not fall in the range of probabilities, then it falls in the probability of mutating to T
-            else:
-                nucleotide_sequence[i] = 'T'
-
-        ## add the distance to the end of the distance_by_generation list
-        distance_by_generation.append(calculate_distance(original_sequence, nucleotide_sequence))
-
-    return distance_by_generation
+    return simulatate_genetic_evolution(mutation_table, nucleotide_sequence)
 
 
-print(simulate_K2P(['A','A', 'A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A']))
+#print(simulate_K2P(['A','A', 'A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A']))
 
-# def simulate_HKY85(nucleotide_sequence: list) -> list:
-#     return
 
-# def simulate_GTR(nucleotide_sequence: list) -> list:
-#     return
+def simulate_HKY85(nucleotide_sequence: list) -> list:
+    ## User defined constants for the Kimura 2-Parameter Model:
+    alpha = 0.07
+    beta = 0.05
+    length = len(nucleotide_sequence)
+
+    ## calculate the frequency ratios based on the frequency of each nucleotide in the sequence
+    pi_A = nucleotide_sequence.count('A') / length
+    pi_C = nucleotide_sequence.count('C') / length
+    pi_G = nucleotide_sequence.count('G') / length
+    pi_T = nucleotide_sequence.count('T') / length
+
+
+    """
+    This mutation table gives all the probabilities of a nucleotide (first key) mutating to the second nucleotide
+    (second key) by HKY85 rules, but adds upon the previous probability. This makes it easy to progressively check a
+    a random number generated for which mutation (or none mutation) should occur
+    """
+
+    mutation_table = {
+        'A': {
+            'A': (1 - (alpha * pi_G) - ((pi_C + pi_T) * beta)),
+            'C': ((1 - (alpha * pi_G) - ((pi_C + pi_T) * beta)) + (beta * pi_C)),
+            'G': (((1 - (alpha * pi_G) - ((pi_C + pi_T) * beta)) + (beta * pi_C)) + (alpha * pi_G)),
+            'T': 1
+        },
+        'C': {
+            'A': (beta * pi_A),
+            'C': ((beta * pi_A) + ((1 - (alpha * pi_T) - (beta * (pi_A + pi_G))))),
+            'G': (((beta * pi_A) + ((1 - (alpha * pi_T) - (beta * (pi_A + pi_G))))) + (beta * pi_G)),
+            'T': 1
+        },
+        'G': {
+            'A': (alpha * pi_A),
+            'C': ((alpha * pi_A) + (beta * pi_C)),
+            'G': (((alpha * pi_A) + (beta * pi_C)) + (1 - (alpha * pi_A) - (beta * (pi_C + pi_T)))),
+            'T': 1
+        },
+        'T': {
+            'A': (beta * pi_A),
+            'C': ((beta * pi_A) + (alpha * pi_C)),
+            'G': ((beta * pi_A) + (alpha * pi_C) + (beta * pi_G)),
+            'T': 1
+        }
+    }
+
+    return simulatate_genetic_evolution(mutation_table, nucleotide_sequence)
+
+#print(simulate_HKY85(['A', 'C', 'G', 'T', 'A', 'C', 'G', 'T', 'A', 'C', 'G', 'T', 'A', 'C', 'G', 'T', 'A', 'C', 'G', 'T']))
+
+
+
