@@ -69,7 +69,7 @@ def simulatate_genetic_evolution(mutation_table: dict, nucleotide_sequence: list
 
 """
 Function to simulate the Jukes-Cantor Evolutionary model
-takes an initial nucleotide sequence and a number of generations to simulate
+Takes an initial nucleotide sequence and a number of generations to simulate
 """
 def simulate_JC(nucleotide_sequence: list) -> list:
     ## User defined constants for the Jukes-Cantor Model:
@@ -111,9 +111,11 @@ def simulate_JC(nucleotide_sequence: list) -> list:
 
     return simulatate_genetic_evolution(mutation_table, nucleotide_sequence)
 
-# print(simulate_JC(['A','A', 'A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A']))
 
-
+"""
+Function to simulate the Kimura 2 Parameter Evolutionary model
+Takes an initial nucleotide sequence and a number of generations to simulate
+"""
 def simulate_K2P(nucleotide_sequence: list) -> list:
     ## User defined constants for the Kimura 2-Parameter Model:
     alpha = 0.07
@@ -127,27 +129,27 @@ def simulate_K2P(nucleotide_sequence: list) -> list:
 
     mutation_table = {
         'A': {
-            'A': (1 - alpha - (2 * beta)),
-            'C': ((1 - alpha - (2 * beta)) + beta),
-            'G': (((1 - alpha - (2 * beta)) + beta) + alpha),
+            'A': 1 - alpha - (2 * beta),
+            'C': 1 - alpha - beta,
+            'G': 1 - beta,
             'T': 1
         },
         'C': {
             'A': beta,
-            'C': (beta + ((1 - alpha - (2 * beta)))),
-            'G': ((beta + ((1 - alpha - (2 * beta)))) + beta),
+            'C': 1 - alpha - beta,
+            'G': 1 - alpha,
             'T': 1
         },
         'G': {
             'A': alpha,
-            'C': (alpha + beta),
-            'G': ((alpha + beta) + (1 - alpha - (2 * beta))),
+            'C': alpha + beta,
+            'G': 1 - beta,
             'T': 1
         },
         'T': {
             'A': beta,
-            'C': (beta + alpha),
-            'G': (beta + alpha + beta),
+            'C': beta + alpha,
+            'G': beta + alpha + beta,
             'T': 1
         }
     }
@@ -155,21 +157,22 @@ def simulate_K2P(nucleotide_sequence: list) -> list:
     return simulatate_genetic_evolution(mutation_table, nucleotide_sequence)
 
 
-#print(simulate_K2P(['A','A', 'A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A','A', 'A']))
-
+"""
+Function to simulate the HKY85 Evolutionary model
+Takes an initial nucleotide sequence and a number of generations to simulate
+"""
 
 def simulate_HKY85(nucleotide_sequence: list) -> list:
-    ## User defined constants for the Kimura 2-Parameter Model:
+    ## User defined constants for the HKY85 Model:
     alpha = 0.07
     beta = 0.05
-    length = len(nucleotide_sequence)
 
-    ## calculate the frequency ratios based on the frequency of each nucleotide in the sequence
+    # calculate the frequency ratios based on the frequency of each nucleotide in the sequence
+    length = len(nucleotide_sequence)
     pi_A = nucleotide_sequence.count('A') / length
     pi_C = nucleotide_sequence.count('C') / length
     pi_G = nucleotide_sequence.count('G') / length
     pi_T = nucleotide_sequence.count('T') / length
-
 
     """
     This mutation table gives all the probabilities of a nucleotide (first key) mutating to the second nucleotide
@@ -179,34 +182,85 @@ def simulate_HKY85(nucleotide_sequence: list) -> list:
 
     mutation_table = {
         'A': {
-            'A': (1 - (alpha * pi_G) - ((pi_C + pi_T) * beta)),
-            'C': ((1 - (alpha * pi_G) - ((pi_C + pi_T) * beta)) + (beta * pi_C)),
-            'G': (((1 - (alpha * pi_G) - ((pi_C + pi_T) * beta)) + (beta * pi_C)) + (alpha * pi_G)),
+            'A': 1 - (alpha * pi_G) - (beta * pi_C) - (beta * pi_T),
+            'C': 1 - (alpha * pi_G) - (beta * pi_T),
+            'G': 1 - (beta * pi_T),
             'T': 1
         },
         'C': {
-            'A': (beta * pi_A),
-            'C': ((beta * pi_A) + ((1 - (alpha * pi_T) - (beta * (pi_A + pi_G))))),
-            'G': (((beta * pi_A) + ((1 - (alpha * pi_T) - (beta * (pi_A + pi_G))))) + (beta * pi_G)),
+            'A': beta * pi_A,
+            'C': 1 - (alpha * pi_T) - (beta * pi_G),
+            'G': 1 - (alpha * pi_T),
             'T': 1
         },
         'G': {
-            'A': (alpha * pi_A),
-            'C': ((alpha * pi_A) + (beta * pi_C)),
-            'G': (((alpha * pi_A) + (beta * pi_C)) + (1 - (alpha * pi_A) - (beta * (pi_C + pi_T)))),
+            'A': alpha * pi_A,
+            'C': (alpha * pi_A) + (beta * pi_C),
+            'G': 1 - (beta * pi_T),
             'T': 1
         },
         'T': {
-            'A': (beta * pi_A),
-            'C': ((beta * pi_A) + (alpha * pi_C)),
-            'G': ((beta * pi_A) + (alpha * pi_C) + (beta * pi_G)),
+            'A': beta * pi_A,
+            'C': (beta * pi_A) + (alpha * pi_C),
+            'G': (beta * pi_A) + (alpha * pi_C) + (beta * pi_G),
             'T': 1
         }
     }
 
     return simulatate_genetic_evolution(mutation_table, nucleotide_sequence)
 
-#print(simulate_HKY85(['A', 'C', 'G', 'T', 'A', 'C', 'G', 'T', 'A', 'C', 'G', 'T', 'A', 'C', 'G', 'T', 'A', 'C', 'G', 'T']))
 
+"""
+Function to simulate the General Time Reversible Evolutionary model
+Takes an initial nucleotide sequence and a number of generations to simulate
+"""
+def simulate_GTR(nucleotide_sequence: list) -> list:
+    # User defined constants for the General Time Reversible Model:
+    alpha_AG
+    alpha_CT
+    beta_AC
+    beta_AT
+    beta_CG
+    beta_G
+    length = len(nucleotide_sequence)
 
+    # calculate the frequency ratios based on the frequency of each nucleotide in the sequence
+    pi_A = nucleotide_sequence.count('A') / length
+    pi_C = nucleotide_sequence.count('C') / length
+    pi_G = nucleotide_sequence.count('G') / length
+    pi_T = nucleotide_sequence.count('T') / length
 
+    """
+    This mutation table gives all the probabilities of a nucleotide (first key) mutating to the second nucleotide
+    (second key) by GTR rules, but adds upon the previous probability. This makes it easy to progressively check a
+    a random number generated for which mutation (or none mutation) should occur
+    """
+
+    mutation_table = {
+        'A': {
+            'A': 1 - (beta_AC * pi_C) - (alpha_AG * pi_G) - (beta_AT * pi_T),
+            'C': 1 - (alpha_AG * pi_G) - (beta_AT * pi_T),
+            'G': 1 - (beta_AT * pi_T),
+            'T': 1
+        },
+        'C': {
+            'A': beta_AC * pi_A,
+            'C': 1 - (beta_CG * pi_G) - (alpha_CT * pi_T),
+            'G': 1 - (alpha_CT * pi_T),
+            'T': 1
+        },
+        'G': {
+            'A': alpha_AG * pi_A,
+            'C': (alpha_AG * pi_A) + (beta_CG * pi_C),
+            'G': 1 - (beta_GT * pi_T),
+            'T': 1
+        },
+        'T': {
+            'A': beta_AT * pi_A,
+            'C': (beta_AT * pi_A) + (alpha_CT * pi_C),
+            'G': (beta_AT * pi_A) + (alpha_CT * pi_C) + (beta_GT * pi_G),
+            'T': 1
+        }
+    }
+
+    return simulatate_genetic_evolution(mutation_table, nucleotide_sequence)
