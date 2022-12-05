@@ -228,7 +228,7 @@ def simulate_GTR(nucleotide_sequence: list) -> list:
     beta_AC
     beta_AT
     beta_CG
-    beta_G
+    beta_GT
     length = len(nucleotide_sequence)
 
     # calculate the frequency ratios based on the frequency of each nucleotide in the sequence
