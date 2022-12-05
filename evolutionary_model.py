@@ -1,4 +1,11 @@
-## TODO: define evolutionary models (JC, K2P, HKY85, GTR)
+"""
+Conrad, Justin, and Khoa
+
+This file holds all the funstions that simulate the different evolutionary models: Jukes-Cantor, Kimura 2-Parameter,
+HKY85, and GTR. Each simulation accepts the initial nucleotide sequence and will run until the average distance of
+a user difined number of consensus genrations is greater than or equal to 0.75 (purely random sequence).
+"""
+
 import random
 
 """

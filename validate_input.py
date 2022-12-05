@@ -1,4 +1,7 @@
-## TODO: define functions to validate data
+"""
+This file gets the user-input file, opens it, and validates that the data is clean. It also capitalizes the nucleotide
+sequence for greater consistency. 
+"""
 
 """
 Function to get the user input from a text file
