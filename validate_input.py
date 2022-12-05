@@ -57,10 +57,10 @@ def validate_nucleotide_sequence(raw_DNA_input: str) -> str:
                  "' at index", i)
            return "Error"
 
-   return capitalized_DNA
+   return list(capitalized_DNA)
 
 def validate_input():
     ## get the file input of initial DNA sequence for each haloid individual
     raw_data = read_file()
     ## validate the input adn return the validated sequence
-    return validate_data(raw_data)
+    return validate_nucleotide_sequence(raw_data)

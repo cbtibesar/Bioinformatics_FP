@@ -6,12 +6,13 @@ model simulations
 import numpy as np
 from matplotlib import pyplot as plt
 
-def plot_data(distance_by_generation, graph_title):
+
+def plot_data(distance_by_generation, graph_title, color):
     y = np.array(distance_by_generation)
     x = np.array(range(len(distance_by_generation)))
     plt.title(graph_title)
     plt.xlabel("Generation")
-    plt.ylabel("Distance")
-    plt.scatter(x, y)
+    plt.ylabel("Genetic Distance")
+    plt.scatter(x, y, color=color)
     plt.show()
 
