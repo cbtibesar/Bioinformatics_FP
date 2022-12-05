@@ -1,6 +1,6 @@
 """
 This file gets the user-input file, opens it, and validates that the data is clean. It also capitalizes the nucleotide
-sequence for greater consistency. 
+sequence for greater consistency.
 """
 
 """
@@ -61,6 +61,6 @@ def validate_nucleotide_sequence(raw_DNA_input: str) -> str:
 
 def validate_input():
     ## get the file input of initial DNA sequence for each haloid individual
-    raw_data = get_DNA_sequence_input()
+    raw_data = read_file()
     ## validate the input adn return the validated sequence
     return validate_data(raw_data)
