@@ -1,9 +1,0 @@
-Global Mutation rate for Yeast:
-.67 ± 0.04 × 10^−10 
-Local Mutation rates:
-A -> T / T -> A : 6.3%
-C -> G / G -> C : 15.2%
-C -> A / G -> T : 18.2%
-A -> C / T -> G : 11.0%
-A -> G / T -> C : 14.4%
-C -> T / G -> A : 35.0%

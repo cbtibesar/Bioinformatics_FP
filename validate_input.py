@@ -7,30 +7,33 @@ sequence for greater consistency.
 Function to get the user input from a text file
 """
 def read_file() -> str:
-   file_name = input("Please enter the name of the file txt file to input: ")
-   try:
-       file = open(file_name, 'r')
+    file_name = input("Please enter the name of the file txt file to input: ")
+    try:
+        file = open(file_name, 'r')
 
-   # check for common exceptions
-   except FileNotFoundError:
-       print("Error: Could not find file ", file_name)
-       return "Error"
-   except OSError:
-       print("Error: OS error while attempting to open ", file_name)
-       return "Error"
-   except Exception:
-       print("Error: Unexpected error while attempting to open ", file_name)
-       return "Error"
+    # check for common exceptions
+    except FileNotFoundError:
+        print("Error: Could not find file ", file_name)
+        return "Error"
+    except OSError:
+        print("Error: OS error while attempting to open ", file_name)
+        return "Error"
+    except Exception:
+        print("Error: Unexpected error while attempting to open ", file_name)
+        return "Error"
 
-   else:
-       file_input = file.read()
-       if file_input == "":
-           print("Error: file is empty")
-           return "Error"
-       else:
-           return file_input
+    else:
+        ## this reads and discards the first line of the file, which is the header for FASTA format
+        file.readline()
+        ## read the rest of the file (the sequence) into a string
+        file_input = file.read()
+        if file_input == "":
+            print("Error: file is empty")
+            return "Error"
+        else:
+            return file_input
 
-       file.close()
+        file.close()
 
 
 """

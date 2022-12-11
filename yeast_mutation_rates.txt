@@ -1,0 +1,35 @@
+Global Mutation rate for Yeast:
+.67 ± 0.04 × 10^−10
+Local Mutation rates:
+A -> T / T -> A : 6.3%
+C -> G / G -> C : 15.2%
+C -> A / G -> T : 18.2%
+A -> C / T -> G : 11.0%
+A -> G / T -> C : 14.4%
+C -> T / G -> A : 35.0%
+
+"""
+In order to simulate the evolutionary models within reasonable computation time, we must make some assumptions about
+the number of mutations over a period of generations. For some of the genes, the mutation rate between individual
+generations is too small, so we must speed up the process by adding in some determinism. To do this, we will assume
+a mutation rate that is greater over a greater number of generations, so each generation in the produced list will
+represent a certain number of generations that have past.
+"""
+
+number_of_generations_per_item = 100000
+
+## User defined constants for the Jukes-Cantor Model for YML093W:
+JC_alpha = .67 * 0.0001
+## User defined constants for the Kimura 2-Parameter Model for YML093W:
+K2P_alpha = (.494 * JC_alpha)
+K2P_beta = (.506 * JC_alpha)
+# #User defined constants for the HKY85 Model for YML093W:
+HKY85_alpha = (.494 * JC_alpha)
+HKY85_beta = (.506 * JC_alpha)
+## User defined constants for the General Time Reversible Model for YML093W:
+alpha_AG = (.247 * JC_alpha)
+alpha_CT = (.247 * JC_alpha)
+beta_AC = (.146 * JC_alpha)
+beta_AT = (.063 * JC_alpha)
+beta_CG = (.152 * JC_alpha)
+beta_GT = (.146 * JC_alpha)

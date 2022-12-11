@@ -11,28 +11,38 @@ import random
 """
 User defined constants
 """
+# User defined stopping point for purely random genetic distance
+threshold_genetic_distance = 0.73
 
-
-## Number of consecutive generations for which the average distance must be above or equal to user-defined purely random
-## genetic distance
+## The number of consensus generations is the number of consecutive generations which must average at or above the
+## genetic distance threshold. This lets the program run a bit past the first instance of exceeding the threshold, which
+## is important as the genetic distance should fluctuate around the threshold
 consensus_generations = 5
-## User defined stopping point for purely random genetic distance
-pr_genetic_distance = 0.72
-## User defined constants for the Jukes-Cantor Model for HIV1:
+
+## In order to simulate the evolutionary models within reasonable computation time, we must make some assumptions about
+## the number of mutations over a period of generations. For some of the genes, the mutation rate between individual
+## generations is too small, so we must speed up the process by adding in some determinism. To do this, we will assume
+## a mutation rate that is greater over a greater number of generations, so each generation in the produced list will
+## represent a certain number of generations that have past.
+number_of_generations_per_item = 1
+
+# User defined constants for the Jukes-Cantor Model for HIV Gag:
 JC_alpha = 7 * .0001
-## User defined constants for the Kimura 2-Parameter Model for HIV1:
-K2P_alpha = 0.0006
-K2P_beta = 0.0001
-# #User defined constants for the HKY85 Model for HIV1:
-HKY85_alpha = 0.0006
-HKY85_beta = 0.0001
-## User defined constants for the General Time Reversible Model for HIV1:
-# alpha_AG
-# alpha_CT
-# beta_AC
-# beta_AT
-# beta_CG
-# beta_GT
+# User defined constants for the Kimura 2-Parameter Model for HIV Gag:
+K2P_alpha = (.769 * JC_alpha)
+K2P_beta = (.231 * JC_alpha)
+# #User defined constants for the HKY85 Model for HIV Gag:
+HKY85_alpha = (.769 * JC_alpha)
+HKY85_beta = (.231 * JC_alpha)
+# User defined constants for the General Time Reversible Model for HIV Gag:
+alpha_AG = (.5 * JC_alpha)
+alpha_CT = (.269 * JC_alpha)
+beta_AC = (.096 * JC_alpha)
+beta_AT = 0
+beta_CG = 0
+beta_GT = (.134 * JC_alpha)
+
+
 
 
 """
@@ -67,7 +77,7 @@ def simulatate_genetic_evolution(mutation_table: dict, nucleotide_sequence: list
     original_sequence = nucleotide_sequence.copy()
     distance_by_generation = [0.0]
 
-    while (calculate_average_distance(distance_by_generation[(-1 * consensus_generations):]) < pr_genetic_distance):
+    while (calculate_average_distance(distance_by_generation[(-1 * consensus_generations):]) < threshold_genetic_distance):
 
         for i in range(len(nucleotide_sequence)):
 

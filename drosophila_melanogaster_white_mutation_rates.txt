@@ -1,0 +1,44 @@
+Global Mutation Rate of Drosophila Melanogaster:
+2.8 × 10^−9
+Local Mutation Rates:
+Transitions: 53.9% of all mutations
+A -> G 7.5%
+G -> A 19.3%
+C -> T 19.3%
+T -> C 7.8%
+Transversions: 46.1% of all mutations
+A -> C 3.3%
+A -> T 6.2%
+C -> A 8.8%
+C -> G 4.6%
+G -> C 4.6%
+G -> T 8.8%
+T -> A 6.5%
+T -> G 3.3%
+
+
+"""
+In order to simulate the evolutionary models within reasonable computation time, we must make some assumptions about
+the number of mutations over a period of generations. For some of the genes, the mutation rate between individual
+generations is too small, so we must speed up the process by adding in some determinism. To do this, we will assume
+a mutation rate that is greater over a greater number of generations, so each generation in the produced list will
+represent a certain number of generations that have past.
+"""
+
+number_of_generations_per_item = (10**5)
+
+## User defined constants for the Jukes-Cantor Model for Drosophila White:
+JC_alpha = 2.8 * 0.0001
+## User defined constants for the Kimura 2-Parameter Model for Drosophila White:
+K2P_alpha = (.539 * JC_alpha)
+K2P_beta = (.461 * JC_alpha)
+# #User defined constants for the HKY85 Model for Drosophila White:
+HKY85_alpha = (.539 * JC_alpha)
+HKY85_beta = (.461 * JC_alpha)
+## User defined constants for the General Time Reversible Model for Drosophila White:
+alpha_AG = (.268 * JC_alpha)
+alpha_CT = (.271 * JC_alpha)
+beta_AC = (.121 * JC_alpha)
+beta_AT = (.127 * JC_alpha)
+beta_CG = (.092 * JC_alpha)
+beta_GT = (.121 * JC_alpha)
