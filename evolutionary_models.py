@@ -217,11 +217,12 @@ Takes an initial nucleotide sequence and a number of generations to simulate
 def simulate_HKY85(nucleotide_sequence: list) -> list:
 
     # calculate the frequency ratios based on the frequency of each nucleotide in the sequence
+    # normalize so that an even distribution of nucleotides correlates to 1
     length = len(nucleotide_sequence)
-    pi_A = nucleotide_sequence.count('A') / length
-    pi_C = nucleotide_sequence.count('C') / length
-    pi_G = nucleotide_sequence.count('G') / length
-    pi_T = nucleotide_sequence.count('T') / length
+    pi_A = 4 * (nucleotide_sequence.count('A') / length)
+    pi_C = 4 * (nucleotide_sequence.count('C') / length)
+    pi_G = 4 * (nucleotide_sequence.count('G') / length)
+    pi_T = 4 * (nucleotide_sequence.count('T') / length)
 
     """
     This mutation table gives all the probabilities of a nucleotide (first key) mutating to the second nucleotide
@@ -269,10 +270,11 @@ def simulate_GTR(nucleotide_sequence: list) -> list:
     length = len(nucleotide_sequence)
 
     ## calculate the frequency ratios based on the frequency of each nucleotide in the sequence
-    pi_A = nucleotide_sequence.count('A') / length
-    pi_C = nucleotide_sequence.count('C') / length
-    pi_G = nucleotide_sequence.count('G') / length
-    pi_T = nucleotide_sequence.count('T') / length
+    ## normalize so that an even distribution of nucleotides correlates to 1
+    pi_A = 4 * (nucleotide_sequence.count('A') / length)
+    pi_C = 4 * (nucleotide_sequence.count('C') / length)
+    pi_G = 4 * (nucleotide_sequence.count('G') / length)
+    pi_T = 4 * (nucleotide_sequence.count('T') / length)
 
     """
     This mutation table gives all the probabilities of a nucleotide (first key) mutating to the second nucleotide
