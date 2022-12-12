@@ -25,20 +25,28 @@ a mutation rate that is greater over a greater number of generations, so each ge
 represent a certain number of generations that have past.
 """
 
-number_of_generations_per_item = (10**5)
+number_of_generations_per_item = 100000
 
 ## User defined constants for the Jukes-Cantor Model for Drosophila White:
+## General mutation rate for the gene
 JC_alpha = 2.8 * 0.0001
-## User defined constants for the Kimura 2-Parameter Model for Drosophila White:
-K2P_alpha = (.539 * JC_alpha)
-K2P_beta = (.461 * JC_alpha)
-# #User defined constants for the HKY85 Model for Drosophila White:
-HKY85_alpha = (.539 * JC_alpha)
-HKY85_beta = (.461 * JC_alpha)
+
+## User defined constants for the Kimura 2-Parameter and HKY85 models for Drosophila White:
+## Mutation rate caused by transitions
+K2P_alpha, HKY85_alpha = (.539 * JC_alpha), (.539 * JC_alpha)
+## Mutation rate caused by transversions
+K2P_beta, HKY85_beta = (.461 * JC_alpha), (.461 * JC_alpha)
+
 ## User defined constants for the General Time Reversible Model for Drosophila White:
+## Mutation rate caused by A <--> G
 alpha_AG = (.268 * JC_alpha)
+# Mutation rate caused by C <--> T
 alpha_CT = (.271 * JC_alpha)
+# Mutation rate caused by A <--> C
 beta_AC = (.121 * JC_alpha)
+# Mutation rate caused by A <--> T
 beta_AT = (.127 * JC_alpha)
+# Mutation rate caused by C <--> G
 beta_CG = (.092 * JC_alpha)
+# Mutation rate caused by T <--> G
 beta_GT = (.121 * JC_alpha)

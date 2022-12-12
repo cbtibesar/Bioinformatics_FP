@@ -1,5 +1,5 @@
 Global Mutation rate for Yeast:
-.67 ± 0.04 × 10^−10
+6.7 ± 0.04 × 10^−11
 Local Mutation rates:
 A -> T / T -> A : 6.3%
 C -> G / G -> C : 15.2%
@@ -16,20 +16,28 @@ a mutation rate that is greater over a greater number of generations, so each ge
 represent a certain number of generations that have past.
 """
 
-number_of_generations_per_item = 100000
+number_of_generations_per_item = 10000000
 
 ## User defined constants for the Jukes-Cantor Model for YML093W:
-JC_alpha = .67 * 0.0001
-## User defined constants for the Kimura 2-Parameter Model for YML093W:
-K2P_alpha = (.494 * JC_alpha)
-K2P_beta = (.506 * JC_alpha)
-# #User defined constants for the HKY85 Model for YML093W:
-HKY85_alpha = (.494 * JC_alpha)
-HKY85_beta = (.506 * JC_alpha)
+## General mutation rate for the gene
+JC_alpha = 6.7 * 0.0001
+
+## User defined constants for the Kimura 2-Parameter and HKY85 models for YML093W:
+## Mutation rate caused by transitions
+K2P_alpha, HKY85_alpha = (.494 * JC_alpha), (.494 * JC_alpha)
+## Mutation rate caused by transversions
+K2P_beta, HKY85_beta = (.506 * JC_alpha), (.506 * JC_alpha)
+
 ## User defined constants for the General Time Reversible Model for YML093W:
+## Mutation rate caused by A <--> G
 alpha_AG = (.247 * JC_alpha)
+# Mutation rate caused by C <--> T
 alpha_CT = (.247 * JC_alpha)
+# Mutation rate caused by A <--> C
 beta_AC = (.146 * JC_alpha)
+# Mutation rate caused by A <--> T
 beta_AT = (.063 * JC_alpha)
+# Mutation rate caused by C <--> G
 beta_CG = (.152 * JC_alpha)
+# Mutation rate caused by T <--> G
 beta_GT = (.146 * JC_alpha)

@@ -12,6 +12,7 @@ def main():
 
     length = len(nucleotide_sequence)
 
+    ## calculate and print the nucleotide distribution
     pi_A = nucleotide_sequence.count('A') / length
     pi_C = nucleotide_sequence.count('C') / length
     pi_G = nucleotide_sequence.count('G') / length
@@ -20,46 +21,49 @@ def main():
     print("Nucleotide distribution: ", {
           "A": pi_A, "C": pi_C, "G": pi_G, "T": pi_T})
 
-    JC_distances =[]
-    K2P_distances = []
-    HKY85_distances = []
-    GTR_distances = []
+    ## create lists to store the number of generations it took each simulation to reach the genetic distance threshold
+    JC_generation_lengths =[]
+    K2P_generation_lengths = []
+    HKY85_generation_lengths = []
+    GTR_generation_lengths = []
 
 
     for i in range(20):
-        ## Get the list of distances of each generation using the Jukes-Cantor Evolutionary model
+        ## Get the list of genetic distances by generation of each generation using the Jukes-Cantor Evolutionary model
         JC_distance = simulate_JC(nucleotide_sequence)
-
         plot_data(JC_distance, "Jukes-Cantor simulation for HIV Gag (" +
                 str(len(JC_distance)) + " generations)", "blue", 1)
 
-        ## Get the list of distances of each generation using the Kimura 2 Parameter Evolutionary model
+        # Get the list of genetic distances by generation of each generation using the Kimura 2 Parameter Evolutionary model
         K2P_distance = simulate_K2P(nucleotide_sequence)
+        # Plot the data
         plot_data(K2P_distance, "K2P simulation for HIV Gag (" +
                 str(len(K2P_distance)) + " generations)", "green", 1)
 
-        ## Get the list of distances of each generation using the HKY85 Evolutionary model
+        # Get the list of genetic distances by generation of each generation using the HKY85 Evolutionary model
         HKY85_distance = simulate_HKY85(nucleotide_sequence)
-        plot_data(HKY85_distance, "HKY85 simulation for HIV Gag(" +
+        # Plot the data
+        plot_data(HKY85_distance, "HKY85 simulation for HIV Gag (" +
                 str(len(HKY85_distance)) + " generations)", "red", 1)
 
-        ## Get the list of distances of each generation using the General Time Reversible Evolutionary model
+        # Get the list of genetic distances by generation of each generation using the General Time Reversible Evolutionary model
         GTR_distance = simulate_GTR(nucleotide_sequence)
-        plot_data(GTR_distance, "GTR simulation for HIV Gag(" +
+        # Plot the data
+        plot_data(GTR_distance, "GTR simulation for HIV Gag (" +
                 str(len(GTR_distance)) + " generations)", "orange", 1)
 
+        ## Create the overlay plot for each of the models for this simulation
         plot_all_data(JC_distance, K2P_distance, HKY85_distance, GTR_distance, "Overlay of evolutionary model simulations", 1)
 
-        JC_distances.append(len(JC_distance))
-        K2P_distances.append(len(K2P_distance))
-        HKY85_distances.append(len(HKY85_distance))
-        GTR_distances.append(len(GTR_distance))
+        ## append the number of generations to reach the genetic distance threshold for each model for this simulation
+        ## to the corresponding list
+        JC_generation_lengths.append(len(JC_distance))
+        K2P_generation_lengths.append(len(K2P_distance))
+        HKY85_generation_lengths.append(len(HKY85_distance))
+        GTR_generation_lengths.append(len(GTR_distance))
 
-    print(JC_distances)
-    print(K2P_distances)
-    print(HKY85_distances)
-    print(GTR_distances)
-
-
+    ## create a dictionary to store the number of generations it took to reach the genetic distance threshold for each simulation for each model
+    generations_by_model = {"JC":JC_generation_lengths, "K2P":K2P_generation_lengths, "HKY85":HKY85_generation_lengths, "GTR":GTR_generation_lengths}
+    print("Number of generations for each simulation by model: ", "\n", generations_by_model)
 
 main()

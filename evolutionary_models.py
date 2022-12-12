@@ -1,7 +1,7 @@
 """
 Conrad, Justin, and Khoa
 
-This file holds all the funstions that simulate the different evolutionary models: Jukes-Cantor, Kimura 2-Parameter,
+This file holds all the functions that simulate the different evolutionary models: Jukes-Cantor, Kimura 2-Parameter,
 HKY85, and GTR. Each simulation accepts the initial nucleotide sequence and will run until the average distance of
 a user difined number of consensus genrations is greater than or equal to 0.75 (purely random sequence).
 """
@@ -19,30 +19,39 @@ threshold_genetic_distance = 0.73
 ## is important as the genetic distance should fluctuate around the threshold
 consensus_generations = 5
 
-## In order to simulate the evolutionary models within reasonable computation time, we must make some assumptions about
-## the number of mutations over a period of generations. For some of the genes, the mutation rate between individual
-## generations is too small, so we must speed up the process by adding in some determinism. To do this, we will assume
-## a mutation rate that is greater over a greater number of generations, so each generation in the produced list will
-## represent a certain number of generations that have past.
+"""
+In order to simulate the evolutionary models within reasonable computation time, we must make some assumptions about
+the number of mutations over a period of generations. For some of the genes, the mutation rate between individual
+generations is too small, so we must speed up the process by adding in some determinism. To do this, we will assume
+a mutation rate that is greater over a greater number of generations, so each generation in the produced list will
+represent a certain number of generations that have past.
+"""
+
 number_of_generations_per_item = 1
 
 # User defined constants for the Jukes-Cantor Model for HIV Gag:
+# General mutation rate for the gene
 JC_alpha = 7 * .0001
-# User defined constants for the Kimura 2-Parameter Model for HIV Gag:
-K2P_alpha = (.769 * JC_alpha)
-K2P_beta = (.231 * JC_alpha)
-# #User defined constants for the HKY85 Model for HIV Gag:
-HKY85_alpha = (.769 * JC_alpha)
-HKY85_beta = (.231 * JC_alpha)
+
+# User defined constants for the Kimura 2-Parameter and HKY85 models for HIV Gag:
+# Mutation rate caused by transitions
+K2P_alpha, HKY85_alpha = (.769 * JC_alpha), (.769 * JC_alpha)
+# Mutation rate caused by transversions
+K2P_beta, HKY85_beta = (.231 * JC_alpha), (.231 * JC_alpha)
+
 # User defined constants for the General Time Reversible Model for HIV Gag:
+# Mutation rate caused by A <--> G
 alpha_AG = (.5 * JC_alpha)
+# Mutation rate caused by C <--> T
 alpha_CT = (.269 * JC_alpha)
+# Mutation rate caused by A <--> C
 beta_AC = (.096 * JC_alpha)
+# Mutation rate caused by A <--> T
 beta_AT = 0
+# Mutation rate caused by C <--> G
 beta_CG = 0
+# Mutation rate caused by T <--> G
 beta_GT = (.134 * JC_alpha)
-
-
 
 
 """
@@ -74,33 +83,43 @@ nucleotide sequence
 """
 
 def simulatate_genetic_evolution(mutation_table: dict, nucleotide_sequence: list) -> list:
+    ## create a copy of the original sequence to compare the mutated sequences to
     original_sequence = nucleotide_sequence.copy()
+    ## create the list to store the genetic distances by generation, starting with the first generation having 0 distance
     distance_by_generation = [0.0]
 
+    ## while the average distance of the last n consensus generations is less than the genetic distance threshold, mutate to the next generation
     while (calculate_average_distance(distance_by_generation[(-1 * consensus_generations):]) < threshold_genetic_distance):
 
+        ## iterate over the length of the nucleotide sequence
         for i in range(len(nucleotide_sequence)):
 
-            # get a random number between 0 and 1 inclusive
+            ## get a random number between 0 and 1 inclusive
             random_float = random.random()
+            ## get the nucleotide at the ith position
             nucleotide = nucleotide_sequence[i]
 
+            ## get the mutation probabilities of that nucleotide for the givben mutation table
             sub_table = mutation_table[nucleotide]
 
+            ## find out what range the random float falls within
+            ## if it falls within the range of the probability of the nucleotide mutating (or "mutating" to itself (prob. of not mutating)),
+            ## set the nucleotide at that position to the corresponding nucleotide
             if (random_float <= sub_table['A']):
                 nucleotide_sequence[i] = 'A'
             elif (random_float <= sub_table['C']):
                 nucleotide_sequence[i] = 'C'
             elif (random_float <= sub_table['G']):
                 nucleotide_sequence[i] = 'G'
-            # if it does not fall in the range of probabilities, then it falls in the probability of mutating to T
+            ## if it does not fall in the range of probabilities, then it falls in the probability of mutating to T
             else:
                 nucleotide_sequence[i] = 'T'
 
-        # add the distance to the end of the distance_by_generation list
+        ## calculate the genetic distance of the newly mutated sequence, and append it to the end of the distance_by_generation list
         distance_by_generation.append(calculate_distance(
             original_sequence, nucleotide_sequence))
 
+    ## once the consensus sequences average at or above the threshold, return the list of genetic distances by generation
     return distance_by_generation
 
 
@@ -143,6 +162,7 @@ def simulate_JC(nucleotide_sequence: list) -> list:
         }
     }
 
+    ## use the generalized simulation function, passing in the JC mutation table and the nucleotide sequence
     return simulatate_genetic_evolution(mutation_table, nucleotide_sequence)
 
 
@@ -151,9 +171,6 @@ Function to simulate the Kimura 2 Parameter Evolutionary model
 Takes an initial nucleotide sequence and a number of generations to simulate
 """
 def simulate_K2P(nucleotide_sequence: list) -> list:
-    ## User defined constants for the Kimura 2-Parameter Model:
-    K2P_alpha = 0.0006
-    K2P_beta = 0.0001
 
     """
     This mutation table gives all the probabilities of a nucleotide (first key) mutating to the second nucleotide
@@ -188,6 +205,7 @@ def simulate_K2P(nucleotide_sequence: list) -> list:
         }
     }
 
+    ## use the generalized simulation function, passing in the K2P mutation table and the nucleotide sequence
     return simulatate_genetic_evolution(mutation_table, nucleotide_sequence)
 
 
@@ -238,6 +256,7 @@ def simulate_HKY85(nucleotide_sequence: list) -> list:
         }
     }
 
+    ## use the generalized simulation function, passing in the HKY85 mutation table and the nucleotide sequence
     return simulatate_genetic_evolution(mutation_table, nucleotide_sequence)
 
 
@@ -249,7 +268,7 @@ def simulate_GTR(nucleotide_sequence: list) -> list:
 
     length = len(nucleotide_sequence)
 
-    # calculate the frequency ratios based on the frequency of each nucleotide in the sequence
+    ## calculate the frequency ratios based on the frequency of each nucleotide in the sequence
     pi_A = nucleotide_sequence.count('A') / length
     pi_C = nucleotide_sequence.count('C') / length
     pi_G = nucleotide_sequence.count('G') / length
@@ -288,4 +307,5 @@ def simulate_GTR(nucleotide_sequence: list) -> list:
         }
     }
 
+    ## use the generalized simulation function, passing in the GTR mutation table and the nucleotide sequence
     return simulatate_genetic_evolution(mutation_table, nucleotide_sequence)
