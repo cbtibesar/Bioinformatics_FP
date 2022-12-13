@@ -63,7 +63,7 @@ def validate_nucleotide_sequence(raw_DNA_input: str) -> str:
    return list(capitalized_DNA)
 
 def validate_input():
-    ## get the file input of initial DNA sequence for each haloid individual
+    ## get the file input of initial DNA sequence for each haploid individual
     raw_data = read_file()
-    ## validate the input adn return the validated sequence
+    ## validate the input and return the validated sequence
     return validate_nucleotide_sequence(raw_data)
