@@ -31,26 +31,26 @@ def main():
     for i in range(20):
         ## Get the list of genetic distances by generation of each generation using the Jukes-Cantor Evolutionary model
         JC_distance = simulate_JC(nucleotide_sequence)
-        plot_data(JC_distance, "Jukes-Cantor simulation for HIV Gag (" +
-                str(len(JC_distance)) + " generations)", "blue", 1)
+        plot_data(JC_distance, "Jukes-Cantor simulation for YML093W (" +
+                str(len(JC_distance)) + " generations)", "blue", 10000000)
 
         # Get the list of genetic distances by generation of each generation using the Kimura 2 Parameter Evolutionary model
         K2P_distance = simulate_K2P(nucleotide_sequence)
         # Plot the data
-        plot_data(K2P_distance, "K2P simulation for HIV Gag (" +
-                str(len(K2P_distance)) + " generations)", "green", 1)
+        plot_data(K2P_distance, "K2P simulation for YML093W (" +
+                str(len(K2P_distance)) + " generations)", "green", 10000000)
 
         # Get the list of genetic distances by generation of each generation using the HKY85 Evolutionary model
         HKY85_distance = simulate_HKY85(nucleotide_sequence)
         # Plot the data
-        plot_data(HKY85_distance, "HKY85 simulation for HIV Gag (" +
-                str(len(HKY85_distance)) + " generations)", "red", 1)
+        plot_data(HKY85_distance, "HKY85 simulation for YML093W (" +
+                str(len(HKY85_distance)) + " generations)", "red", 10000000)
 
         # Get the list of genetic distances by generation of each generation using the General Time Reversible Evolutionary model
         GTR_distance = simulate_GTR(nucleotide_sequence)
         # Plot the data
-        plot_data(GTR_distance, "GTR simulation for HIV Gag (" +
-                str(len(GTR_distance)) + " generations)", "orange", 1)
+        plot_data(GTR_distance, "GTR simulation for YML093W (" +
+                str(len(GTR_distance)) + " generations)", "orange", 10000000)
 
         ## Create the overlay plot for each of the models for this simulation
         plot_all_data(JC_distance, K2P_distance, HKY85_distance, GTR_distance, "Overlay of evolutionary model simulations", 1)

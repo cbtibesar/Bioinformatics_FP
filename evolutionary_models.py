@@ -12,12 +12,13 @@ import random
 User defined constants
 """
 # User defined stopping point for purely random genetic distance
-threshold_genetic_distance = 0.73
+threshold_genetic_distance = 0.749
 
 ## The number of consensus generations is the number of consecutive generations which must average at or above the
 ## genetic distance threshold. This lets the program run a bit past the first instance of exceeding the threshold, which
 ## is important as the genetic distance should fluctuate around the threshold
 consensus_generations = 5
+
 
 """
 In order to simulate the evolutionary models within reasonable computation time, we must make some assumptions about
@@ -27,31 +28,32 @@ a mutation rate that is greater over a greater number of generations, so each ge
 represent a certain number of generations that have past.
 """
 
-number_of_generations_per_item = 1
+number_of_generations_per_item = 10000000
 
-# User defined constants for the Jukes-Cantor Model for HIV Gag:
+# User defined constants for the Jukes-Cantor Model for YML093W:
 # General mutation rate for the gene
-JC_alpha = 7 * .0001
+JC_alpha = 6.7 * 0.0001
 
-# User defined constants for the Kimura 2-Parameter and HKY85 models for HIV Gag:
+# User defined constants for the Kimura 2-Parameter and HKY85 models for YML093W:
 # Mutation rate caused by transitions
-K2P_alpha, HKY85_alpha = (.769 * JC_alpha), (.769 * JC_alpha)
+K2P_alpha, HKY85_alpha = (.494 * JC_alpha), (.494 * JC_alpha)
 # Mutation rate caused by transversions
-K2P_beta, HKY85_beta = (.231 * JC_alpha), (.231 * JC_alpha)
+K2P_beta, HKY85_beta = (.506 * JC_alpha), (.506 * JC_alpha)
 
-# User defined constants for the General Time Reversible Model for HIV Gag:
+# User defined constants for the General Time Reversible Model for YML093W:
 # Mutation rate caused by A <--> G
-alpha_AG = (.5 * JC_alpha)
+alpha_AG = (.247 * JC_alpha)
 # Mutation rate caused by C <--> T
-alpha_CT = (.269 * JC_alpha)
+alpha_CT = (.247 * JC_alpha)
 # Mutation rate caused by A <--> C
-beta_AC = (.096 * JC_alpha)
+beta_AC = (.146 * JC_alpha)
 # Mutation rate caused by A <--> T
-beta_AT = 0
+beta_AT = (.063 * JC_alpha)
 # Mutation rate caused by C <--> G
-beta_CG = 0
+beta_CG = (.152 * JC_alpha)
 # Mutation rate caused by T <--> G
-beta_GT = (.134 * JC_alpha)
+beta_GT = (.146 * JC_alpha)
+
 
 
 """
