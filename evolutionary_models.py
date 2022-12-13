@@ -11,8 +11,8 @@ First the gene's parameters need to be copy and pasted in to supply JC_alpha, K2
 different mutation rates for the genes for each evolutionary model). These values can be found within the mutation rate
 txt files labeled by gene.
 
-Next, whenever a simulation function for a model is called from the main program, the mutaion rate table is generated
-given the mutaion rate value pasted in for the gene and the model simulation that has been called. This table provides
+Next, whenever a simulation function for a model is called from the main program, the mutation rate table is generated
+given the mutation rate value pasted in for the gene and the model simulation that has been called. This table provides
 the probabilities it takes for a certain nucleotide to mutate to another given the evolutionary model (also having the
 probability the nucleotide does not mutate). It sums up the probabilities in a way that simulates throwing a dart at a
 dartboard, making it easy to determine which nucleotide a spot should mutate to.
