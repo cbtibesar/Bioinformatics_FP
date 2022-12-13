@@ -43,12 +43,12 @@ def plot_all_data(distance_by_generation_JC, distance_by_generation_K2P, distanc
     y_GTR = np.array(distance_by_generation_GTR)
     x_GTR = np.array(range(len(distance_by_generation_GTR)))
 
-    ## set the title and lables
+    ## set the title and labels
     plt.title(graph_title)
     plt.xlabel("Generation (x 10^" + str(math.log(generations_per_item, 10)) + ")")
     plt.ylabel("Genetic Distance")
 
-    ## plot each gaph over each other with different colors and lables
+    ## plot each graph over each other with different colors and labels
     plt.scatter(x_JC, y_JC, s=5, color="blue", label="JC")
     plt.scatter(x_K2P, y_K2P, s=5, color="green", label="K2P")
     plt.scatter(x_HKY85, y_HKY85, s=5, color="red", label="HKY85")
