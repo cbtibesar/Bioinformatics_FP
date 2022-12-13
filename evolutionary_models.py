@@ -3,7 +3,7 @@ Conrad, Justin, and Khoa
 
 This file holds all the functions that simulate the different evolutionary models: Jukes-Cantor, Kimura 2-Parameter,
 HKY85, and GTR. Each simulation accepts the initial nucleotide sequence and will run until the average distance of
-a user defined number of consensus genrations is greater than or equal to 0.75 (maximum genetic distance).
+a user defined number of consensus generations is greater than or equal to 0.75 (maximum genetic distance).
 
 The process of simulating an evolution model is relatively similar for each model:
 
@@ -11,8 +11,8 @@ First the gene's parameters need to be copy and pasted in to supply JC_alpha, K2
 different mutation rates for the genes for each evolutionary model). These values can be found within the mutation rate
 txt files labeled by gene.
 
-Next, whenever a simulation function for a model is called from the main program, the muation rate table is generated
-given the muation rate value pasted in for the gene and the model simulation that has been called. This table provides
+Next, whenever a simulation function for a model is called from the main program, the mutaion rate table is generated
+given the mutaion rate value pasted in for the gene and the model simulation that has been called. This table provides
 the probabilities it takes for a certain nucleotide to mutate to another given the evolutionary model (also having the
 probability the nucleotide does not mutate). It sums up the probabilities in a way that simulates throwing a dart at a
 dartboard, making it easy to determine which nucleotide a spot should mutate to.
@@ -23,13 +23,13 @@ what nucleotide it should mutate to (or not mutate). That spot is set to the nuc
 entire sequence.
 
 The genetic distance of the mutated sequence is then calculated by counting the number of differences between the mutated
-sequence and the original sequence, and divinding that count by the number of nucleotides in either sequence. This distance
+sequence and the original sequence, and dividing that count by the number of nucleotides in either sequence. This distance
 is added to a list that keeps track of the genetic distance by generation.
 
 Then the list of genetic distances by generation is checked to see if the last n sequences (consensus sequences) average
 a distance at or above the user defined threshold of maximum genetic distance (0.75). This is a user defined threshold,
 since having at 0.75 can cause the simulation to run drastically longer than en 0.749. If the last n consensus sequences
-average above the threshold, then the list of genetic distances by generation is returned to main function to be plotted.
+average above the threshold, then the list of genetic distances by generation is returned to the main function to be plotted.
 
 If the last n consensus sequences do not meet the threshold for maximum genetic distance, than the current distance is
 added to the list of genetic distances by generation, and the nucleotide sequence mutation process is repeated, representing
@@ -37,9 +37,9 @@ a new generation of mutation.
 
 In order to simulate the evolutionary models within reasonable computation time, we must make some assumptions about
 the number of mutations over a period of generations. For some of the genes, the mutation rate between individual
-generations is too small, so we must speed up the process by adding in some determinism. To do this, we will assume
+generations are too small, so we must speed up the process by adding in some determinism. To do this, we will assume
 a mutation rate that is greater over a greater number of generations, so each generation in the produced list will
-represent a certain number of generations that have past. This number is set in the main function, as it just needs to be
+represent a certain number of generations that have passed. This number is set in the main function, as it just needs to be
 recorded on the graph.
 
 """
