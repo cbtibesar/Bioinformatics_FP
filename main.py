@@ -7,7 +7,7 @@ simulation will be ran 20 times, with the number of generations it took to reach
 each simulation for each model.
 
 IMPORTANT: you must set the model parameters (mutation rates for transitions, transversions, etc.) in the
-evolutionary_models.py file! These values are formatted and found in the mutation rates txt file labelled by the name of
+evolutionary_models.py file! These values are formatted and found in the mutation rates txt file labeled by the name of
 the gene.
 
 Once the file has been given by the user, the program will run a simulation for each model 20 times, each time producing
