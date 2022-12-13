@@ -13,18 +13,9 @@ G -> T 11.5%
 
 Other mutations not present in dataset (0%)
 
-"""
-In order to simulate the evolutionary models within reasonable computation time, we must make some assumptions about
-the number of mutations over a period of generations. For some of the genes, the mutation rate between individual
-generations is too small, so we must speed up the process by adding in some determinism. To do this, we will assume
-a mutation rate that is greater over a greater number of generations, so each generation in the produced list will
-represent a certain number of generations that have past.
-"""
-
-number_of_generations_per_item = 1
 
 ## User defined constants for the Jukes-Cantor Model for HIV Gag:
-## General mutation rate for the gene
+## General mutation rate for the gene (per nucleotide per 1 generation)
 JC_alpha = 7 * .0001
 
 ## User defined constants for the Kimura 2-Parameter and HKY85 models for HIV Gag:

@@ -3,7 +3,45 @@ Conrad, Justin, and Khoa
 
 This file holds all the functions that simulate the different evolutionary models: Jukes-Cantor, Kimura 2-Parameter,
 HKY85, and GTR. Each simulation accepts the initial nucleotide sequence and will run until the average distance of
-a user difined number of consensus genrations is greater than or equal to 0.75 (purely random sequence).
+a user defined number of consensus genrations is greater than or equal to 0.75 (maximum genetic distance).
+
+The process of simulating an evolution model is relatively similar for each model:
+
+First the gene's parameters need to be copy and pasted in to supply JC_alpha, K2P_alpha, K2P_beta, ... etc. (the
+different mutation rates for the genes for each evolutionary model). These values can be found within the mutation rate
+txt files labeled by gene.
+
+Next, whenever a simulation function for a model is called from the main program, the muation rate table is generated
+given the muation rate value pasted in for the gene and the model simulation that has been called. This table provides
+the probabilities it takes for a certain nucleotide to mutate to another given the evolutionary model (also having the
+probability the nucleotide does not mutate). It sums up the probabilities in a way that simulates throwing a dart at a
+dartboard, making it easy to determine which nucleotide a spot should mutate to.
+
+Then the nucleotide sequence gone through nucleotide by nucleotide, at each step generating a random number between 0 and
+1 inclusive, and checking the range of probabilities that random number falls within in the mutation table to determine
+what nucleotide it should mutate to (or not mutate). That spot is set to the nucleotide, and the process is continued for the
+entire sequence.
+
+The genetic distance of the mutated sequence is then calculated by counting the number of differences between the mutated
+sequence and the original sequence, and divinding that count by the number of nucleotides in either sequence. This distance
+is added to a list that keeps track of the genetic distance by generation.
+
+Then the list of genetic distances by generation is checked to see if the last n sequences (consensus sequences) average
+a distance at or above the user defined threshold of maximum genetic distance (0.75). This is a user defined threshold,
+since having at 0.75 can cause the simulation to run drastically longer than en 0.749. If the last n consensus sequences
+average above the threshold, then the list of genetic distances by generation is returned to main function to be plotted.
+
+If the last n consensus sequences do not meet the threshold for maximum genetic distance, than the current distance is
+added to the list of genetic distances by generation, and the nucleotide sequence mutation process is repeated, representing
+a new generation of mutation.
+
+In order to simulate the evolutionary models within reasonable computation time, we must make some assumptions about
+the number of mutations over a period of generations. For some of the genes, the mutation rate between individual
+generations is too small, so we must speed up the process by adding in some determinism. To do this, we will assume
+a mutation rate that is greater over a greater number of generations, so each generation in the produced list will
+represent a certain number of generations that have past. This number is set in the main function, as it just needs to be
+recorded on the graph.
+
 """
 
 import random
@@ -12,46 +50,36 @@ import random
 User defined constants
 """
 # User defined stopping point for purely random genetic distance
-threshold_genetic_distance = 0.74
+threshold_genetic_distance = 0.749
 
 ## The number of consensus generations is the number of consecutive generations which must average at or above the
 ## genetic distance threshold. This lets the program run a bit past the first instance of exceeding the threshold, which
 ## is important as the genetic distance should fluctuate around the threshold
 consensus_generations = 5
 
-
-"""
-In order to simulate the evolutionary models within reasonable computation time, we must make some assumptions about
-the number of mutations over a period of generations. For some of the genes, the mutation rate between individual
-generations is too small, so we must speed up the process by adding in some determinism. To do this, we will assume
-a mutation rate that is greater over a greater number of generations, so each generation in the produced list will
-represent a certain number of generations that have past.
-"""
-number_of_generations_per_item = 10000000
-
-# User defined constants for the Jukes-Cantor Model for YML093W:
+# User defined constants for the Jukes-Cantor Model for HIV Gag:
 # General mutation rate for the gene
-JC_alpha = 6.7 * 0.0001
+JC_alpha = 7 * .0001
 
-# User defined constants for the Kimura 2-Parameter and HKY85 models for YML093W:
+# User defined constants for the Kimura 2-Parameter and HKY85 models for HIV Gag:
 # Mutation rate caused by transitions
-K2P_alpha, HKY85_alpha = (.494 * JC_alpha * 2), (.494 * JC_alpha * 2)
+K2P_alpha, HKY85_alpha = (.769 * JC_alpha * 2), (.769 * JC_alpha * 2)
 # Mutation rate caused by transversions
-K2P_beta, HKY85_beta = (.506 * JC_alpha * 2), (.506 * JC_alpha * 2)
+K2P_beta, HKY85_beta = (.231 * JC_alpha * 2), (.231 * JC_alpha * 2)
 
-# User defined constants for the General Time Reversible Model for YML093W:
+# User defined constants for the General Time Reversible Model for HIV Gag:
 # Mutation rate caused by A <--> G
-alpha_AG = (.247 * JC_alpha * 4)
+alpha_AG = (.5 * JC_alpha * 4)
 # Mutation rate caused by C <--> T
-alpha_CT = (.247 * JC_alpha * 4)
+alpha_CT = (.269 * JC_alpha * 4)
 # Mutation rate caused by A <--> C
-beta_AC = (.146 * JC_alpha * 8)
+beta_AC = (.096 * JC_alpha * 8)
 # Mutation rate caused by A <--> T
-beta_AT = (.063 * JC_alpha * 8)
+beta_AT = 0
 # Mutation rate caused by C <--> G
-beta_CG = (.152 * JC_alpha * 8)
+beta_CG = 0
 # Mutation rate caused by T <--> G
-beta_GT = (.146 * JC_alpha * 8)
+beta_GT = (.134 * JC_alpha * 8)
 
 
 
