@@ -12,6 +12,7 @@ Function for plotting a single scatter plot of the genetic distance by generatio
 """
 def plot_data(distance_by_generation, graph_title, color, generations_per_item):
     ## create a numpy array from the genetic distance by generation values and the number of generations
+
     y = np.array(distance_by_generation)
     x = np.array(range(len(distance_by_generation)))
 

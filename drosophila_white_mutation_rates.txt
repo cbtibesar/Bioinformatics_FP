@@ -33,20 +33,21 @@ JC_alpha = 2.8 * 0.0001
 
 ## User defined constants for the Kimura 2-Parameter and HKY85 models for Drosophila White:
 ## Mutation rate caused by transitions
-K2P_alpha, HKY85_alpha = (.539 * JC_alpha), (.539 * JC_alpha)
+K2P_alpha, HKY85_alpha = (.539 * JC_alpha * 2), (.539 * JC_alpha * 2)
 ## Mutation rate caused by transversions
-K2P_beta, HKY85_beta = (.461 * JC_alpha), (.461 * JC_alpha)
+K2P_beta, HKY85_beta = (.461 * JC_alpha * 2), (.461 * JC_alpha * 2)
 
 ## User defined constants for the General Time Reversible Model for Drosophila White:
 ## Mutation rate caused by A <--> G
-alpha_AG = (.268 * JC_alpha)
+alpha_AG = (.268 * JC_alpha * 4)
 # Mutation rate caused by C <--> T
-alpha_CT = (.271 * JC_alpha)
+alpha_CT = (.271 * JC_alpha * 4)
 # Mutation rate caused by A <--> C
-beta_AC = (.121 * JC_alpha)
+beta_AC = (.121 * JC_alpha * 8)
 # Mutation rate caused by A <--> T
-beta_AT = (.127 * JC_alpha)
+beta_AT = (.127 * JC_alpha * 8)
 # Mutation rate caused by C <--> G
-beta_CG = (.092 * JC_alpha)
+beta_CG = (.092 * JC_alpha * 8)
 # Mutation rate caused by T <--> G
-beta_GT = (.121 * JC_alpha)
+beta_GT = (.121 * JC_alpha * 8)
+

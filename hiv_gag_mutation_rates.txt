@@ -29,21 +29,20 @@ JC_alpha = 7 * .0001
 
 ## User defined constants for the Kimura 2-Parameter and HKY85 models for HIV Gag:
 ## Mutation rate caused by transitions
-K2P_alpha, HKY85_alpha = (.769 * JC_alpha), (.769 * JC_alpha)
+K2P_alpha, HKY85_alpha = (.769 * JC_alpha * 2), (.769 * JC_alpha * 2)
 ## Mutation rate caused by transversions
-K2P_beta, HKY85_beta = (.231 * JC_alpha), (.231 * JC_alpha)
+K2P_beta, HKY85_beta = (.231 * JC_alpha * 2), (.231 * JC_alpha * 2)
 
 ## User defined constants for the General Time Reversible Model for HIV Gag:
 ## Mutation rate caused by A <--> G
-alpha_AG = (.5 * JC_alpha)
+alpha_AG = (.5 * JC_alpha * 4)
 # Mutation rate caused by C <--> T
-alpha_CT = (.269 * JC_alpha)
+alpha_CT = (.269 * JC_alpha * 4)
 # Mutation rate caused by A <--> C
-beta_AC = (.096 * JC_alpha)
+beta_AC = (.096 * JC_alpha * 8)
 # Mutation rate caused by A <--> T
 beta_AT = 0
 # Mutation rate caused by C <--> G
 beta_CG = 0
 # Mutation rate caused by T <--> G
-beta_GT = (.134 * JC_alpha)
-
+beta_GT = (.134 * JC_alpha * 8)

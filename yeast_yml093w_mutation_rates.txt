@@ -24,20 +24,20 @@ JC_alpha = 6.7 * 0.0001
 
 ## User defined constants for the Kimura 2-Parameter and HKY85 models for YML093W:
 ## Mutation rate caused by transitions
-K2P_alpha, HKY85_alpha = (.494 * JC_alpha), (.494 * JC_alpha)
+K2P_alpha, HKY85_alpha = (.494 * JC_alpha * 2), (.494 * JC_alpha * 2)
 ## Mutation rate caused by transversions
-K2P_beta, HKY85_beta = (.506 * JC_alpha), (.506 * JC_alpha)
+K2P_beta, HKY85_beta = (.506 * JC_alpha * 2), (.506 * JC_alpha * 2)
 
 ## User defined constants for the General Time Reversible Model for YML093W:
 ## Mutation rate caused by A <--> G
-alpha_AG = (.247 * JC_alpha)
+alpha_AG = (.247 * JC_alpha * 4)
 # Mutation rate caused by C <--> T
-alpha_CT = (.247 * JC_alpha)
+alpha_CT = (.247 * JC_alpha * 4)
 # Mutation rate caused by A <--> C
-beta_AC = (.146 * JC_alpha)
+beta_AC = (.146 * JC_alpha * 8)
 # Mutation rate caused by A <--> T
-beta_AT = (.063 * JC_alpha)
+beta_AT = (.063 * JC_alpha * 8)
 # Mutation rate caused by C <--> G
-beta_CG = (.152 * JC_alpha)
+beta_CG = (.152 * JC_alpha * 8)
 # Mutation rate caused by T <--> G
-beta_GT = (.146 * JC_alpha)
+beta_GT = (.146 * JC_alpha * 8)

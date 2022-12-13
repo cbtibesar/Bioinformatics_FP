@@ -12,7 +12,7 @@ import random
 User defined constants
 """
 # User defined stopping point for purely random genetic distance
-threshold_genetic_distance = 0.749
+threshold_genetic_distance = 0.74
 
 ## The number of consensus generations is the number of consecutive generations which must average at or above the
 ## genetic distance threshold. This lets the program run a bit past the first instance of exceeding the threshold, which
@@ -27,7 +27,6 @@ generations is too small, so we must speed up the process by adding in some dete
 a mutation rate that is greater over a greater number of generations, so each generation in the produced list will
 represent a certain number of generations that have past.
 """
-
 number_of_generations_per_item = 10000000
 
 # User defined constants for the Jukes-Cantor Model for YML093W:
@@ -36,23 +35,23 @@ JC_alpha = 6.7 * 0.0001
 
 # User defined constants for the Kimura 2-Parameter and HKY85 models for YML093W:
 # Mutation rate caused by transitions
-K2P_alpha, HKY85_alpha = (.494 * JC_alpha), (.494 * JC_alpha)
+K2P_alpha, HKY85_alpha = (.494 * JC_alpha * 2), (.494 * JC_alpha * 2)
 # Mutation rate caused by transversions
-K2P_beta, HKY85_beta = (.506 * JC_alpha), (.506 * JC_alpha)
+K2P_beta, HKY85_beta = (.506 * JC_alpha * 2), (.506 * JC_alpha * 2)
 
 # User defined constants for the General Time Reversible Model for YML093W:
 # Mutation rate caused by A <--> G
-alpha_AG = (.247 * JC_alpha)
+alpha_AG = (.247 * JC_alpha * 4)
 # Mutation rate caused by C <--> T
-alpha_CT = (.247 * JC_alpha)
+alpha_CT = (.247 * JC_alpha * 4)
 # Mutation rate caused by A <--> C
-beta_AC = (.146 * JC_alpha)
+beta_AC = (.146 * JC_alpha * 8)
 # Mutation rate caused by A <--> T
-beta_AT = (.063 * JC_alpha)
+beta_AT = (.063 * JC_alpha * 8)
 # Mutation rate caused by C <--> G
-beta_CG = (.152 * JC_alpha)
+beta_CG = (.152 * JC_alpha * 8)
 # Mutation rate caused by T <--> G
-beta_GT = (.146 * JC_alpha)
+beta_GT = (.146 * JC_alpha * 8)
 
 
 
@@ -159,10 +158,11 @@ def simulate_JC(nucleotide_sequence: list) -> list:
         'T': {
             'A': JC_alpha,
             'C': 2 * JC_alpha,
-            'G': 1 - JC_alpha,
+            'G': 3 * JC_alpha,
             'T': 1
         }
     }
+
 
     ## use the generalized simulation function, passing in the JC mutation table and the nucleotide sequence
     return simulatate_genetic_evolution(mutation_table, nucleotide_sequence)
@@ -221,6 +221,7 @@ def simulate_HKY85(nucleotide_sequence: list) -> list:
     # calculate the frequency ratios based on the frequency of each nucleotide in the sequence
     # normalize so that an even distribution of nucleotides correlates to 1
     length = len(nucleotide_sequence)
+
     pi_A = 4 * (nucleotide_sequence.count('A') / length)
     pi_C = 4 * (nucleotide_sequence.count('C') / length)
     pi_G = 4 * (nucleotide_sequence.count('G') / length)
